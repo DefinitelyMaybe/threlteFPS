@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
-	import { ContactShadows, OrbitControls } from '@threlte/extras';
+	import { OrbitControls } from '@threlte/extras';
 	import * as THREE from 'three';
 	import Map from './models/collision-world.svelte';
 
@@ -19,5 +19,3 @@
 <T.HemisphereLight args={[0x8dc1de, 0x00668d, 1.5]} position={[2, 1, 1]} />
 
 <Map />
-
-<ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} />

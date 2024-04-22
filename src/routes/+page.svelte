@@ -3,9 +3,9 @@
 	import { Canvas } from '@threlte/core';
 	import { World, Debug } from '@threlte/rapier';
 	import Scene from '$lib/components/Scene.svelte';
-	import { Pane, Checkbox } from 'svelte-tweakpane-ui';
+	import { Pane, Checkbox, Button } from 'svelte-tweakpane-ui';
 	import { debug } from '$lib/stores';
-	import { Listeners } from '@manapotion/svelte';
+	import { Listeners, browser, enterFullscreen, exitFullscreen } from '@manapotion/svelte';
 </script>
 
 <Listeners />
@@ -23,4 +23,8 @@
 
 <Pane position="fixed">
 	<Checkbox bind:value={$debug} label="debug" />
+	<Button
+		title="toggle fullscreen"
+		on:click={$browser.isFullscreen ? exitFullscreen : enterFullscreen}
+	/>
 </Pane>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as THREE from 'three';
 	import { useThrelte } from '@threlte/core';
+	import { mouse, browser } from '@manapotion/svelte';
 
 	const { scene } = useThrelte();
 
@@ -25,6 +26,12 @@
 			collider: new THREE.Sphere(new THREE.Vector3(0, -100, 0), SPHERE_RADIUS),
 			velocity: new THREE.Vector3()
 		});
+	}
+
+	$: if ($mouse.buttons.left) {
+		if ($browser.isFullscreen) {
+			throwBall();
+		}
 	}
 
 	function throwBall() {
