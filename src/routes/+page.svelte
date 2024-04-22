@@ -5,7 +5,10 @@
 	import Scene from '$lib/components/Scene.svelte';
 	import { Pane, Checkbox } from 'svelte-tweakpane-ui';
 	import { debug } from '$lib/stores';
+	import { Listeners } from '@manapotion/svelte';
 </script>
+
+<Listeners />
 
 <div class="h-screen w-screen">
 	<Canvas>

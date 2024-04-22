@@ -7,7 +7,7 @@
 	const { scene } = useThrelte();
 
 	scene.background = new THREE.Color(0x88ccee);
-	scene.fog = new THREE.Fog(0x88ccee, 0, 50);
+	scene.fog = new THREE.Fog(0x88ccee, 20, 100);
 </script>
 
 <T.PerspectiveCamera near={0.1} far={1000} makeDefault position={[-10, 10, 10]} fov={70}>

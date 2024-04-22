@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@manapotion/svelte':
+    specifier: ^0.26.0
+    version: 0.26.0(svelte@4.2.15)
   svelte-tweakpane-ui:
     specifier: ^1.2.4
     version: 1.2.4(svelte@4.2.15)
@@ -352,6 +355,19 @@ packages:
       tweakpane: ^4.0.0
     dependencies:
       tweakpane: 4.0.3
+    dev: false
+
+  /@manapotion/core@0.26.0:
+    resolution: {integrity: sha512-t9bLnGRyyPNAYs7saG0AeQOW2KJEoks9Br1jKxFlhUOTTxcaITFNO0RzCaH+8KJRw/dtuzFBV0kWuFVVOqoC/A==}
+    dev: false
+
+  /@manapotion/svelte@0.26.0(svelte@4.2.15):
+    resolution: {integrity: sha512-z+ANBPnJDbPpSALyd2Fjp+GcVkvYOQcGaItt1bQpcOJZa0hHXJ0KuU79uzNGahdFaKAjuhR2qPN1UANRLyEJPA==}
+    peerDependencies:
+      svelte: '>=4.2.1'
+    dependencies:
+      '@manapotion/core': 0.26.0
+      svelte: 4.2.15
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:

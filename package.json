@@ -35,6 +35,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@manapotion/svelte": "^0.26.0",
 		"svelte-tweakpane-ui": "^1.2.4"
 	}
 }
