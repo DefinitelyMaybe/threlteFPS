@@ -5,13 +5,22 @@
 	import Scene from '$lib/components/Scene.svelte';
 	import { Pane, Checkbox, Button } from 'svelte-tweakpane-ui';
 	import { debug } from '$lib/stores';
-	import { Listeners, browser, enterFullscreen, exitFullscreen } from '@manapotion/svelte';
+	import {
+		Listeners,
+		browser,
+		mouse,
+		enterFullscreen,
+		exitFullscreen,
+		lockPointer,
+		unlockPointer
+	} from '@manapotion/svelte';
+	import { VSMShadowMap } from 'three';
 </script>
 
 <Listeners />
 
 <div class="h-screen w-screen">
-	<Canvas>
+	<Canvas shadows={VSMShadowMap}>
 		<World>
 			{#if $debug}
 				<Debug />
@@ -27,4 +36,5 @@
 		title="toggle fullscreen"
 		on:click={$browser.isFullscreen ? exitFullscreen : enterFullscreen}
 	/>
+	<Button title="toggle mouseLock" on:click={$mouse.locked ? unlockPointer : lockPointer} />
 </Pane>

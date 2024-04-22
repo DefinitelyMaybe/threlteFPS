@@ -26,8 +26,9 @@ Command: npx @threlte/gltf@2.0.3 C:\Users\blah\Documents\threlteFPS\static\model
 	};
 
 	const gltf = useGltf<GLTFResult>('/models/collision-world.glb');
-	//   .then((result) => {
-	// 	result.nodes.Cube004.geometry.scale(1, 1, 1);
+	// 	.then((result) => {
+	//	// // do stuff with the gltf before being placed in the scene
+	// 	// result.nodes.Cube004.geometry.scale(0.5, 0.5, 0.5);
 	// 	return result;
 	// });
 
@@ -42,7 +43,7 @@ Command: npx @threlte/gltf@2.0.3 C:\Users\blah\Documents\threlteFPS\static\model
 			<T.Mesh
 				geometry={gltf.nodes.Cube004.geometry}
 				material={gltf.materials['Material.001']}
-				position={[7.68, -5.59, 26.38]}
+				position={[7.68, -5.59, 46.38]}
 				castShadow
 				receiveShadow
 			/>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as THREE from 'three';
 	import { useThrelte } from '@threlte/core';
-	import { mouse, browser } from '@manapotion/svelte';
 
 	const { scene } = useThrelte();
 
@@ -26,30 +25,5 @@
 			collider: new THREE.Sphere(new THREE.Vector3(0, -100, 0), SPHERE_RADIUS),
 			velocity: new THREE.Vector3()
 		});
-	}
-
-	$: if ($mouse.buttons.left) {
-		if ($browser.isFullscreen) {
-			throwBall();
-		}
-	}
-
-	function throwBall() {
-		const sphere = spheres[sphereIdx];
-
-		camera.getWorldDirection(playerDirection);
-
-		sphere.collider.center
-			.copy(playerCollider.end)
-			.addScaledVector(playerDirection, playerCollider.radius * 1.5);
-
-		// throw the ball with more force if we hold the button longer, and if we move forward
-
-		const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001));
-
-		sphere.velocity.copy(playerDirection).multiplyScalar(impulse);
-		sphere.velocity.addScaledVector(playerVelocity, 2);
-
-		sphereIdx = (sphereIdx + 1) % spheres.length;
 	}
 </script>
