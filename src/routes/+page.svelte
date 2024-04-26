@@ -36,13 +36,13 @@
 		title="toggle fullscreen"
 		on:click={$browser.isFullscreen ? exitFullscreen : enterFullscreen}
 	/>
-	<!-- <Button title="toggle mouseLock" on:click={$mouse.locked ? unlockPointer : lockPointer} /> -->
-	<Button
+	<Button title="toggle mouseLock" on:click={$mouse.locked ? unlockPointer : lockPointer} />
+	<!-- <Button
 		title="toggle mouseLock"
 		on:click={() => {
 			if ($cameraControls) {
 				$cameraControls.lockPointer();
 			}
 		}}
-	/>
+	/> -->
 </Pane>

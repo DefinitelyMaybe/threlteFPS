@@ -1,10 +1,18 @@
 <script lang="ts">
 	import { T, useTask, useThrelte } from '@threlte/core';
+	import { BasicPlayerController } from '@threlte/rapier';
 	import { keyboard, mouse } from '@manapotion/svelte';
-	import CameraControls from './camera-controls.svelte';
-	import { cameraControls } from '../stores';
+	// import CameraControls from './camera-controls.svelte';
+	// import { cameraControls } from '../stores';
+	import { CapsuleGeometry, Euler, MeshStandardMaterial } from 'three';
 
 	const { camera } = useThrelte();
+
+	const PI_2 = Math.PI / 2;
+	const camEuler = new Euler(0, 0, 0, 'YXZ');
+	let maxPolarAngle = Math.PI;
+	let minPolarAngle = 0;
+	let pointerSpeed = 1.0;
 
 	let playerOnFloor = false;
 
@@ -64,6 +72,20 @@
 		}
 	}
 
+	// inspired by https://github.com/mrdoob/three.js/examples/jsm/controls/PointerLockControls.js#L117
+	function handleMouseMove(event: MouseEvent) {
+		if ($mouse.locked) {
+			camEuler.setFromQuaternion($camera.quaternion);
+
+			camEuler.y -= event.movementX * 0.002 * pointerSpeed;
+			camEuler.x -= event.movementY * 0.002 * pointerSpeed;
+
+			camEuler.x = Math.max(PI_2 - maxPolarAngle, Math.min(PI_2 - minPolarAngle, camEuler.x));
+
+			$camera.quaternion.setFromEuler(camEuler);
+		}
+	}
+
 	function throwBall() {
 		const sphere = spheres[sphereIdx];
 
@@ -95,13 +117,25 @@
 	}
 </script>
 
-<T.PerspectiveCamera near={0.1} far={1000} makeDefault position={[0, 0, 1e-5]} fov={70}>
-	<CameraControls
+<svelte:body on:mousemove={handleMouseMove} />
+
+<T.PerspectiveCamera near={0.1} far={1000} makeDefault position={[10, 10, 10]} fov={70}
+></T.PerspectiveCamera>
+<!-- <CameraControls
 		on:create={({ ref }) => {
 			$cameraControls = ref;
 			// console.log(ref.azimuthRotateSpeed);
 			ref.moveTo(10, 10, 10);
-			// ref.azimuthRotateSpeed = 2;
+			ref.azimuthRotateSpeed = 1;
+			ref.polarRotateSpeed = 1;
+			ref.smoothTime = 0.1;
+			ref.draggingSmoothTime = 0.1;
 		}}
-	/>
-</T.PerspectiveCamera>
+	/> -->
+
+<BasicPlayerController position={[10, 10, 10]} speed={3}>
+	<T.Mesh position.y={0.8}>
+		<T.CapsuleGeometry args={[0.3, 1.8 - 0.3 * 2]} />
+		<T.MeshStandardMaterial />
+	</T.Mesh>
+</BasicPlayerController>
