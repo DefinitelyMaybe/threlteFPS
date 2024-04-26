@@ -4,7 +4,7 @@
 	import { keyboard, mouse } from '@manapotion/svelte';
 	// import CameraControls from './camera-controls.svelte';
 	// import { cameraControls } from '../stores';
-	import { CapsuleGeometry, Euler, MeshStandardMaterial } from 'three';
+	import { Euler } from 'three';
 
 	const { camera } = useThrelte();
 
