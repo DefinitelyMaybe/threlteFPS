@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { useTask, useThrelte } from '@threlte/core';
+	import { T, useTask, useThrelte } from '@threlte/core';
 	import { keyboard, mouse } from '@manapotion/svelte';
+	import CameraControls from './camera-controls.svelte';
+	import { cameraControls } from '../stores';
 
 	const { camera } = useThrelte();
 
@@ -92,3 +94,14 @@
 		}
 	}
 </script>
+
+<T.PerspectiveCamera near={0.1} far={1000} makeDefault position={[0, 0, 1e-5]} fov={70}>
+	<CameraControls
+		on:create={({ ref }) => {
+			$cameraControls = ref;
+			// console.log(ref.azimuthRotateSpeed);
+			ref.moveTo(10, 10, 10);
+			// ref.azimuthRotateSpeed = 2;
+		}}
+	/>
+</T.PerspectiveCamera>

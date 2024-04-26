@@ -8,6 +8,9 @@ dependencies:
   '@manapotion/svelte':
     specifier: ^0.26.0
     version: 0.26.0(svelte@4.2.15)
+  camera-controls:
+    specifier: ^2.8.3
+    version: 2.8.3(three@0.159.0)
   svelte-tweakpane-ui:
     specifier: ^1.2.4
     version: 1.2.4(svelte@4.2.15)
@@ -840,6 +843,14 @@ packages:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
     dev: true
+
+  /camera-controls@2.8.3(three@0.159.0):
+    resolution: {integrity: sha512-zFjqUR6onLkG+z1A6vAWfzovxZxWVSvp6e5t3lfZgfgPZtX3n74aykNAUaoRbq8Y3tOxadHkDjbfGDOP9hFf2w==}
+    peerDependencies:
+      three: '>=0.126.1'
+    dependencies:
+      three: 0.159.0
+    dev: false
 
   /caniuse-lite@1.0.30001611:
     resolution: {integrity: sha512-19NuN1/3PjA3QI8Eki55N8my4LzfkMCRLgCVfrl/slbSAchQfV0+GwjPrK3rq37As4UCLlM/DHajbKkAqbv92Q==}
@@ -1939,7 +1950,6 @@ packages:
 
   /three@0.159.0:
     resolution: {integrity: sha512-eCmhlLGbBgucuo4VEA9IO3Qpc7dh8Bd4VKzr7WfW4+8hMcIfoAVi1ev0pJYN9PTTsCslbcKgBwr2wNZ1EvLInA==}
-    dev: true
 
   /tiny-glob@0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}

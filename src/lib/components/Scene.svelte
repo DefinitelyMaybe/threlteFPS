@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
-	import { OrbitControls, Grid } from '@threlte/extras';
+	import { Grid } from '@threlte/extras';
 	import * as THREE from 'three';
 	import Map from './models/collision-world.svelte';
+	import Player from './player.svelte';
 
 	const { scene } = useThrelte();
 
@@ -10,9 +11,7 @@
 	scene.fog = new THREE.Fog(0x88ccee, 20, 100);
 </script>
 
-<T.PerspectiveCamera near={0.1} far={1000} makeDefault position={[-10, 10, 10]} fov={70}>
-	<OrbitControls enableDamping target.y={1.5} />
-</T.PerspectiveCamera>
+<Player />
 
 <T.DirectionalLight
 	color={0xffffff}
