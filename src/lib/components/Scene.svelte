@@ -3,7 +3,7 @@
 	import { Grid } from '@threlte/extras';
 	import * as THREE from 'three';
 	import Map from './models/collision-world.svelte';
-	import Player from './player.svelte';
+	import Player from './player/player.svelte';
 
 	const { scene } = useThrelte();
 
@@ -11,7 +11,7 @@
 	scene.fog = new THREE.Fog(0x88ccee, 20, 100);
 </script>
 
-<Player />
+<Player position={[10, 10, 10]} />
 
 <T.DirectionalLight
 	color={0xffffff}
