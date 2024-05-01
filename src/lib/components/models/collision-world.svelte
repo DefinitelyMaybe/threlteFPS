@@ -26,11 +26,6 @@ Command: npx @threlte/gltf@2.0.3 C:\Users\blah\Documents\threlteFPS\static\model
 	};
 
 	const gltf = useGltf<GLTFResult>('/models/collision-world.glb');
-	// 	.then((result) => {
-	//	// // do stuff with the gltf before being placed in the scene
-	// 	// result.nodes.Cube004.geometry.scale(0.5, 0.5, 0.5);
-	// 	return result;
-	// });
 
 	const component = forwardEventHandlers();
 </script>

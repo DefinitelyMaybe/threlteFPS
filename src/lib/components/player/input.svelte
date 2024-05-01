@@ -7,7 +7,6 @@
 
 	const playerContext: PlayerContext = getContext('playerContext');
 	const actions = playerContext.actions;
-	let grounded = playerContext.grounded;
 
 	const { camera } = useThrelte();
 
@@ -31,52 +30,48 @@
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
-		// playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
-		// playerVelocity.y = 15;
-		if (event.code['KeyW']) {
+		if (event.code == 'KeyW') {
 			actions.moveforward = 1;
 		}
 
-		if (event.code['KeyS']) {
+		if (event.code == 'KeyS') {
 			actions.movebackward = 1;
 		}
 
-		if (event.code['KeyA']) {
+		if (event.code == 'KeyA') {
 			actions.moveleft = 1;
 		}
 
-		if (event.code['KeyD']) {
+		if (event.code == 'KeyD') {
 			actions.moveright = 1;
 		}
 
-		if (grounded) {
-			if (event.code['Space']) {
-				actions.jump = 1;
-			}
+		if (event.code == 'KeyE') {
+			actions.jump = 1;
 		}
 	}
 
 	function handleKeyUp(event: KeyboardEvent) {
-		if (event.code['KeyW']) {
+		if (event.code == 'KeyW') {
 			actions.moveforward = 0;
 		}
 
-		if (event.code['KeyS']) {
+		if (event.code == 'KeyS') {
 			actions.movebackward = 0;
 		}
 
-		if (event.code['KeyA']) {
+		if (event.code == 'KeyA') {
 			actions.moveleft = 0;
 		}
 
-		if (event.code['KeyD']) {
+		if (event.code == 'KeyD') {
 			actions.moveright = 0;
 		}
 
-		if (event.code['Space']) {
+		if (event.code == 'KeyE') {
 			actions.jump = 0;
 		}
 	}
 </script>
 
-<svelte:body on:mousemove={handleMouseMove} on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
+<svelte:window on:mousemove={handleMouseMove} on:keydown={handleKeyDown} on:keyup={handleKeyUp} />

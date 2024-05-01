@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
-	import { Grid } from '@threlte/extras';
-	import * as THREE from 'three';
+	import { Color, Fog } from 'three';
 	import Map from './models/collision-world.svelte';
 	import Player from './player/player.svelte';
 
 	const { scene } = useThrelte();
 
-	scene.background = new THREE.Color(0x88ccee);
-	scene.fog = new THREE.Fog(0x88ccee, 20, 100);
+	scene.background = new Color(0x88ccee);
+	scene.fog = new Fog(0x88ccee, 20, 100);
 </script>
 
-<Player position={[10, 10, 10]} />
+<Player />
 
 <T.DirectionalLight
 	color={0xffffff}
@@ -31,9 +30,5 @@
 />
 
 <T.HemisphereLight args={[0x8dc1de, 0x00668d, 1.5]} position={[2, 1, 1]} />
-
-<Grid infiniteGrid />
-
-<T.AxesHelper />
 
 <Map />

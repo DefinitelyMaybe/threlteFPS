@@ -3,15 +3,19 @@
 	import { RigidBody, AutoColliders } from '@threlte/rapier';
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat';
 	import { mouse } from '@manapotion/svelte';
-	import { Vector3 } from 'three';
+	import { Vector3, Group } from 'three';
 	import type { Actions } from './PlayerTypes';
 	import Input from './input.svelte';
 	import { setContext } from 'svelte';
+	import { playerRigidBody as playerStore } from '../../stores';
 
 	const { camera } = useThrelte();
+	const group = new Group();
+	group.position.set(-6.9, 4, -5.2);
 
 	let playerRigidBody: RapierRigidBody;
 	let playerOnGround = false;
+	let jumpStrength = 25;
 
 	const actions: Actions = {
 		moveleft: 0,
@@ -28,44 +32,38 @@
 		}
 	}
 
+	$: if (playerRigidBody) {
+		$playerStore = playerRigidBody;
+	}
+
 	setContext('playerContext', { actions, grounded: playerOnGround });
 
-	useTask(() => {
+	useTask((delta) => {
 		teleportPlayerIfOob();
-		updatePlayerRigidBody();
+		updatePlayerRigidBody(delta);
 	});
 
-	function getForwardVector() {
-		camera.getWorldDirection(playerDirection);
-		playerDirection.y = 0;
-		playerDirection.normalize();
-
-		return playerDirection;
-	}
-
-	function getSideVector() {
-		camera.getWorldDirection(playerDirection);
-		playerDirection.y = 0;
-		playerDirection.normalize();
-		playerDirection.cross(camera.up);
-
-		return playerDirection;
-	}
-
-	function updatePlayerRigidBody() {
+	function updatePlayerRigidBody(delta: number) {
 		let initVel = playerRigidBody.linvel();
-		let newVel = new Vector3(initVel.x, initVel.y, initVel.z);
 
-		const temp = new Vector3(
+		const speedDelta = delta * 1000 * (playerOnGround ? 1 : 0.75);
+		const temp = getMovementDirection()
+			.applyQuaternion($camera.quaternion)
+			.multiplyScalar(speedDelta);
+
+		if (actions.jump == 1 && playerOnGround) {
+			playerRigidBody.setLinvel({ x: temp.x, y: jumpStrength, z: temp.z }, true);
+		} else {
+			playerRigidBody.setLinvel({ x: temp.x, y: initVel.y, z: temp.z }, true);
+		}
+	}
+
+	function getMovementDirection() {
+		return new Vector3(
 			-actions.moveleft + actions.moveright,
 			0,
 			-actions.moveforward + actions.movebackward
 		).normalize();
-
-		// 	// gives a bit of air control
-		// 	const speedDelta = delta * (playerOnFloor ? 25 : 8);
-
-		playerRigidBody.setLinvel(newVel, true);
 	}
 
 	function throwBall() {
@@ -88,31 +86,35 @@
 	}
 
 	function teleportPlayerIfOob() {
-		if ($camera.position.y <= -25) {
-			console.log('YES, oob');
-			// playerCollider.start.set(0, 0.35, 0);
-			// playerCollider.end.set(0, 1, 0);
-			// playerCollider.radius = 0.35;
-			// camera.position.copy(playerCollider.end);
-			// camera.rotation.set(0, 0, 0);
+		if (playerRigidBody) {
+			const pos = playerRigidBody.translation();
+			if (pos.y <= -25) {
+				playerRigidBody.setTranslation({ x: -6.9, y: 4, z: -5.2 }, true);
+			}
 		}
 	}
 </script>
 
 <Input />
 
-<T.Group {...$$restProps}>
+<T is={group}>
 	<RigidBody
 		bind:rigidBody={playerRigidBody}
 		type="dynamic"
 		enabledRotations={[false, false, false]}
+		on:contact={async () => {
+			playerOnGround = true;
+		}}
+		on:collisionexit={() => {
+			playerOnGround = false;
+		}}
 	>
 		<AutoColliders>
-			<T.Mesh>
-				<T.SphereGeometry />
+			<T.Mesh castShadow>
+				<T.CapsuleGeometry args={[2, 1, 2, 10]} />
 				<T.MeshStandardMaterial />
 			</T.Mesh>
 			<T.PerspectiveCamera near={0.1} far={1000} makeDefault fov={70} />
 		</AutoColliders>
 	</RigidBody>
-</T.Group>
+</T>
