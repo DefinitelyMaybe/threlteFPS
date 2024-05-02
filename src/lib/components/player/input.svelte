@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { useThrelte } from '@threlte/core';
-	import { mouse } from '@manapotion/svelte';
+	import { mouse, lockPointer } from '@manapotion/svelte';
 	import { Euler } from 'three';
 	import { getContext } from 'svelte';
 	import type { PlayerContext } from './PlayerTypes';
@@ -46,7 +46,7 @@
 			actions.moveright = 1;
 		}
 
-		if (event.code == 'KeyE') {
+		if (event.code == 'Space') {
 			actions.jump = 1;
 		}
 	}
@@ -68,10 +68,11 @@
 			actions.moveright = 0;
 		}
 
-		if (event.code == 'KeyE') {
+		if (event.code == 'Space') {
 			actions.jump = 0;
 		}
 	}
 </script>
 
+<svelte:body on:click|stopPropagation={lockPointer} />
 <svelte:window on:mousemove={handleMouseMove} on:keydown={handleKeyDown} on:keyup={handleKeyUp} />

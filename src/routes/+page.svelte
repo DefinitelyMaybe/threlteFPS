@@ -30,9 +30,10 @@
 	</Canvas>
 </div>
 
-<div class="absolute top-0 left-1/2 text-white">
-	<p>Use <span class="font-bold">'wasd'</span> keys to move</p>
-	<p>press <span class="font-bold">'e'</span> key to jump</p>
+<div class="absolute top-0 w-full text-center text-white">
+	<p>mouse to look around and click to throw ball</p>
+	<p><span class="font-bold">wasd</span> to move, <span class="font-bold">Space</span> to jump</p>
+	<a href="https://github.com/DefinitelyMaybe/threlteFPS">source code (MIT)</a>
 </div>
 
 <Pane position="fixed">

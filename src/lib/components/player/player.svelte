@@ -3,19 +3,19 @@
 	import { RigidBody, AutoColliders } from '@threlte/rapier';
 	import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat';
 	import { mouse } from '@manapotion/svelte';
-	import { Vector3, Group } from 'three';
+	import { Vector3 } from 'three';
 	import type { Actions } from './PlayerTypes';
 	import Input from './input.svelte';
 	import { setContext } from 'svelte';
-	import { playerRigidBody as playerStore } from '../../stores';
 
 	const { camera } = useThrelte();
-	const group = new Group();
-	group.position.set(-6.9, 4, -5.2);
 
 	let playerRigidBody: RapierRigidBody;
 	let playerOnGround = false;
 	let jumpStrength = 25;
+	let ballThrowStrength = 60;
+
+	let ballRigidBody: RapierRigidBody;
 
 	const actions: Actions = {
 		moveleft: 0,
@@ -27,26 +27,22 @@
 
 	$: if ($mouse.buttons.left) {
 		if ($mouse.locked) {
-			console.log('throw ball');
-			// throwBall();
+			throwBall();
 		}
-	}
-
-	$: if (playerRigidBody) {
-		$playerStore = playerRigidBody;
 	}
 
 	setContext('playerContext', { actions, grounded: playerOnGround });
 
 	useTask((delta) => {
-		teleportPlayerIfOob();
 		updatePlayerRigidBody(delta);
+		teleportPlayerIfOob();
+		resetBall();
 	});
 
 	function updatePlayerRigidBody(delta: number) {
 		let initVel = playerRigidBody.linvel();
 
-		const speedDelta = delta * 1000 * (playerOnGround ? 1 : 0.75);
+		const speedDelta = delta * 1000;
 		const temp = getMovementDirection()
 			.applyQuaternion($camera.quaternion)
 			.multiplyScalar(speedDelta);
@@ -67,37 +63,41 @@
 	}
 
 	function throwBall() {
-		const sphere = spheres[sphereIdx];
+		const camDirection = new Vector3();
+		$camera.getWorldDirection(camDirection);
 
-		camera.getWorldDirection(playerDirection);
+		const playerPos = playerRigidBody.translation();
+		const newBallPos = new Vector3(playerPos.x, playerPos.y, playerPos.z);
+		newBallPos.addScaledVector(camDirection, 2.5);
 
-		sphere.collider.center
-			.copy(playerCollider.end)
-			.addScaledVector(playerDirection, playerCollider.radius * 1.5);
+		camDirection.multiplyScalar(ballThrowStrength);
 
-		// throw the ball with more force if we hold the button longer, and if we move forward
-
-		const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001));
-
-		sphere.velocity.copy(playerDirection).multiplyScalar(impulse);
-		sphere.velocity.addScaledVector(playerVelocity, 2);
-
-		sphereIdx = (sphereIdx + 1) % spheres.length;
+		ballRigidBody.setTranslation(newBallPos, true);
+		ballRigidBody.setLinvel(camDirection, true);
 	}
 
 	function teleportPlayerIfOob() {
 		if (playerRigidBody) {
 			const pos = playerRigidBody.translation();
 			if (pos.y <= -25) {
-				playerRigidBody.setTranslation({ x: -6.9, y: 4, z: -5.2 }, true);
+				playerRigidBody.setTranslation({ x: -6.9, y: 5, z: -5.2 }, true);
+				playerRigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true);
 			}
+		}
+	}
+
+	function resetBall() {
+		const ballPos = ballRigidBody.translation();
+		if (ballPos.y <= -25) {
+			ballRigidBody.setTranslation({ x: -6.9, y: 5, z: -5.2 }, true);
+			ballRigidBody.setLinvel({ x: 0, y: 0, z: 0 }, true);
 		}
 	}
 </script>
 
 <Input />
 
-<T is={group}>
+<T.Group position={[-6.9, 4, -5.2]}>
 	<RigidBody
 		bind:rigidBody={playerRigidBody}
 		type="dynamic"
@@ -111,10 +111,21 @@
 	>
 		<AutoColliders>
 			<T.Mesh castShadow>
-				<T.CapsuleGeometry args={[2, 1, 2, 10]} />
+				<T.CapsuleGeometry args={[1, 1, 2, 10]} />
 				<T.MeshStandardMaterial />
 			</T.Mesh>
 			<T.PerspectiveCamera near={0.1} far={1000} makeDefault fov={70} />
 		</AutoColliders>
 	</RigidBody>
-</T>
+</T.Group>
+
+<T.Group position={[-6.9, 4, -5.2]}>
+	<RigidBody type="dynamic" linearDamping={0.5} bind:rigidBody={ballRigidBody}>
+		<AutoColliders shape="ball">
+			<T.Mesh>
+				<T.SphereGeometry args={[0.4]} />
+				<T.MeshStandardMaterial color={0xdede8d} />
+			</T.Mesh>
+		</AutoColliders>
+	</RigidBody>
+</T.Group>
